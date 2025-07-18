@@ -1,6 +1,7 @@
 import streamlit as st
 import streamlit.components.v1 as components
 import base64
+from PIL import Image
 st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
 st.markdown("""
 <style>
@@ -47,14 +48,28 @@ def get_base64_image(image_path):
         b64_string = base64.b64encode(img_file.read()).decode("utf-8")
     return f"data:image/png;base64,{b64_string}"  # jpg → jpeg for compatibility
 
-# logo_base64 = get_base64_image("SimuPhysimg.png")
+logo_base64 = get_base64_image("SimuPhysimg.png")
 
-# st.markdown(f"""
-# <div style="position: absolute; top: 50px; left: 50px; z-index: 10; background-color: rgba(0,0,0,0.5); color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
-#   <img src="{logo_base64}" width="200" height="200" />
-# </div>
-# """, unsafe_allow_html=True)
-# Embed Wave Grid via Three.js
+st.markdown(f"""
+<div style="position: absolute; top: 80px; left: 100px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+  <img src="{logo_base64}" width="500" height="500" />
+</div>
+""", unsafe_allow_html=True)
+
+
+st.markdown("""<div>
+<div style="position: absolute; top: 50px; left: 900px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+    <a href="page1" target="_self" class="button-container">page</a>
+</div>
+<div style="position: absolute; top: 250px; left: 1250px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+    <a href="page2" target="_self" class="button-container">page2</a>
+</div>
+<div style="position: absolute; top: 450px; left: 900px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+    <a href="page3" target="_self" class="button-container">page3</a>
+</div>    
+            </div>        
+""", unsafe_allow_html=True)
+
 components.html("""
 <div id="three-container" style="
   position: fixed;
@@ -72,7 +87,8 @@ components.html("""
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
   const container = document.getElementById("three-container");
-
+  
+  const c1 = document.getElementById("button-container");
   const scene = new THREE.Scene();
   scene.fog = new THREE.FogExp2(0x7200ab, 0.026);
 

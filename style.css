@@ -46,3 +46,25 @@ h1 {
     justify-content: center;
     gap: 2rem;
 }
+
+
+
+
+
+.button-container {
+    display: inline-flexbox;
+    text-decoration: none; /* Removes the underline */
+    background-color: #05162C; /* Button color */
+    color: white;
+    padding: 609x 609x; /* Adjust padding to keep button size balanced */
+    border-radius: 8px;
+    font-size: 30px; /* Increased button font size */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+    width: 200px;
+    height: 200px;
+    display: flex; /* Enables flexbox */
+    justify-content: center; /* Centers the text horizontally */
+    align-items: center; /* Centers the text vertically */
+    text-align: center;
+}
