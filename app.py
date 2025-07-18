@@ -47,13 +47,13 @@ def get_base64_image(image_path):
         b64_string = base64.b64encode(img_file.read()).decode("utf-8")
     return f"data:image/png;base64,{b64_string}"  # jpg → jpeg for compatibility
 
-logo_base64 = get_base64_image("SimuPhysimg.png")
+# logo_base64 = get_base64_image("SimuPhysimg.png")
 
-st.markdown(f"""
-<div style="position: absolute; top: 50px; left: 50px; z-index: 10; background-color: rgba(0,0,0,0.5); color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
-  <img src="{logo_base64}" width="200" height="200" />
-</div>
-""", unsafe_allow_html=True)
+# st.markdown(f"""
+# <div style="position: absolute; top: 50px; left: 50px; z-index: 10; background-color: rgba(0,0,0,0.5); color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+#   <img src="{logo_base64}" width="200" height="200" />
+# </div>
+# """, unsafe_allow_html=True)
 # Embed Wave Grid via Three.js
 components.html("""
 <div id="three-container" style="
@@ -126,4 +126,4 @@ components.html("""
     renderer.setSize(width, height);
   });
 </script>
-""", height=670,width=1534)
+""", height=800,width=1534)
