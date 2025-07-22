@@ -34,15 +34,22 @@ def load_css(file):
 
 csspath = pathlib.Path("style.css")
 load_css(csspath)
+
 st.markdown("""<div>
-<div style="position: absolute; top: 280px; left: 300px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
-    <a href="page1" target="_self" class="button-container">page</a>
+<div style="position: absolute; top: 280px; left: 130px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+    <a href="Classical Mechanics/VectorFields" target="_self" class="button-container">Vector Fields</a>
 </div>
-<div style="position: absolute; top: 280px; left: 1000px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
-    <a href="page1" target="_self" class="button-container">page</a>
-</div>   
+<div style="position: absolute; top: 280px; left: 480px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+    <a href="Classical Mechanics/OscillationVariations" target="_self" class="button-container">Oscillation Variations</a>
+</div>
+<div style="position: absolute; top: 280px; left: 840px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+    <a href="Classical Mechanics/ProjectileMotion" target="_self" class="button-container">Projectile Motion</a>
+</div>    
 </div>        
 """, unsafe_allow_html=True)
+
+
+
 
 
 components.html("""
@@ -50,18 +57,18 @@ components.html("""
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 1534px;
+  height: 800px;
   z-index: -1;
   overflow: hidden;
   margin: 0;
   padding: 0;
 "></div>
 
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
   const container = document.getElementById("three-container");
+
   const scene = new THREE.Scene();
   scene.fog = new THREE.FogExp2(0x7200ab, 0.026);
 

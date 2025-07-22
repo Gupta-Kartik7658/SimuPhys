@@ -59,13 +59,13 @@ st.markdown(f"""
 
 st.markdown("""<div>
 <div style="position: absolute; top: 50px; left: 900px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
-    <a href="page1" target="_self" class="button-container">page</a>
+    <a href="QuantumMechanics" target="_self" class="button-container">Quantum Mechanics</a>
 </div>
 <div style="position: absolute; top: 250px; left: 1250px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
-    <a href="page2" target="_self" class="button-container">page2</a>
+    <a href="Electromagnetism" target="_self" class="button-container">Electromagnetism</a>
 </div>
 <div style="position: absolute; top: 450px; left: 900px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
-    <a href="page3" target="_self" class="button-container">page3</a>
+    <a href="ClassicalMechanics" target="_self" class="button-container">Classical Mechanics</a>
 </div>    
             </div>        
 """, unsafe_allow_html=True)
@@ -75,8 +75,8 @@ components.html("""
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 1534px;
+  height: 800px;
   z-index: -1;
   overflow: hidden;
   margin: 0;

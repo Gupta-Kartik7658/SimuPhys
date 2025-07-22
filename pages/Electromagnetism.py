@@ -37,20 +37,17 @@ load_css(csspath)
 
 st.markdown("""<div>
 <div style="position: absolute; top: 280px; left: 130px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
-    <a href="page1" target="_self" class="button-container">page</a>
+    <a href="Electromagnetism/ElectromagneticWaves" target="_self" class="button-container">Electromagnetic Waves</a>
 </div>
 <div style="position: absolute; top: 280px; left: 480px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
-    <a href="page1" target="_self" class="button-container">page</a>
+    <a href="Electromagnetism/LaplacesPotentialFields" target="_self" class="button-container">Laplace’s Potential Fields</a>
 </div>
 <div style="position: absolute; top: 280px; left: 840px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
-    <a href="page1" target="_self" class="button-container">page</a>
+    <a href="Electromagnetism/RLCcircuitsimulations" target="_self" class="button-container">RLC circuit simulations</a>
 </div> 
-<div style="position: absolute; top: 280px; left: 1180px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
-    <a href="page1" target="_self" class="button-container">page</a>
-</div>   
+   
 </div>        
 """, unsafe_allow_html=True)
-
 
 
 
@@ -60,8 +57,8 @@ components.html("""
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 1534px;
+  height: 800px;
   z-index: -1;
   overflow: hidden;
   margin: 0;
