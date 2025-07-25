@@ -8,9 +8,9 @@ pio.renderers.default = "browser"
 
 def main():
     # Get user input
-    fx_str = input("Enter Fₓ(x, y, z): ")
-    fy_str = input("Enter Fᵧ(x, y, z): ") 
-    fz_str = input("Enter F_z(x, y, z): ") 
+    fx_str = input("Enter Fₓ(x, y, z): ") or "2*x*y"
+    fy_str = input("Enter Fᵧ(x, y, z): ") or "sin(cos(x*y))"
+    fz_str = input("Enter F_z(x, y, z): ") or "5*x"
     density = input("Enter grid density (default=6): ")
     density = int(density) if density.strip() else 6
 
