@@ -13,7 +13,7 @@ with st.sidebar:
     beta = st.slider("Damping Coefficient (β)", 0.0, 2.0, 0.1, 0.1)
     mode = st.selectbox("Mode", ["Undamped", "Damped", "Overdamped"])
 
-# Embed HTML + Three.js simulation with OrbitControls
+# Embed HTML + Three.js
 html_code = f"""
 <!DOCTYPE html>
 <html>
@@ -21,11 +21,30 @@ html_code = f"""
   <meta charset="utf-8">
   <title>Oscillations</title>
   <style>
-    body {{ margin: 0; overflow: hidden; }}
+    body {{ margin: 0; overflow: hidden; font-family: sans-serif; }}
     canvas {{ display: block; }}
+    #controls {{
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(255,255,255,0.8);
+        padding: 10px;
+        border-radius: 8px;
+        z-index: 1;
+    }}
+    button {{
+        margin-right: 10px;
+        padding: 6px 12px;
+        font-size: 14px;
+    }}
   </style>
 </head>
 <body>
+<div id="controls">
+    <button onclick="play()">▶️ Play</button>
+    <button onclick="pause()">⏸️ Pause</button>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/controls/OrbitControls.min.js"></script>
 <script>
@@ -34,9 +53,12 @@ const omega = {omega};
 const beta = {beta};
 const mode = "{mode}";
 
-// Scene, camera, renderer
+let isPlaying = false;
+let wavefront = 0;
+
+// Scene setup
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 100);
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
 camera.position.set(6, 4, 10);
 camera.lookAt(0, 0, 0);
 
@@ -50,11 +72,11 @@ controls.dampingFactor = 0.1;
 controls.rotateSpeed = 0.5;
 controls.zoomSpeed = 0.5;
 
-// Axes helper
+// Axes
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
 
-// Create line points for oscillator
+// Line geometry
 const pointCount = 300;
 const spacing = 0.05;
 const oscPoints = [];
@@ -67,51 +89,62 @@ const oscMaterial = new THREE.LineBasicMaterial({{ color: 0x00ffff }});
 const oscLine = new THREE.Line(oscGeometry, oscMaterial);
 scene.add(oscLine);
 
-// Particle at wave end
-const particleGeometry = new THREE.SphereGeometry(0.1, 16, 16);
-const particleMaterial = new THREE.MeshBasicMaterial({{ color: 0xff0000 }});
-const particle = new THREE.Mesh(particleGeometry, particleMaterial);
-scene.add(particle);
-
-// Clock for timing
+// Clock
 const clock = new THREE.Clock();
 
-// Animation loop with controls
+// Animation loop
 function animate() {{
-    function renderLoop() {{
-        const t = clock.getElapsedTime();
+    requestAnimationFrame(animate);
 
-        // Update wave points
+    if (isPlaying) {{
+        const t = clock.getElapsedTime();
+        wavefront = omega * t;
+
         for (let i = 0; i < pointCount; i++) {{
             const x = i * spacing;
             let y = 0;
-            if (mode === "Undamped") {{
-                y = A * Math.sin(omega * t - omega * x);
-            }} else if (mode === "Damped") {{
-                y = A * Math.exp(-beta * x) * Math.sin(omega * t - omega * x);
-            }} else if (mode === "Overdamped") {{
-                y = A * Math.exp(-beta * x);
+
+            if (x <= wavefront) {{
+                let fade = 1.0;
+                const fadeWidth = 0.5;
+                const distanceToFront = wavefront - x;
+                if (distanceToFront < fadeWidth) {{
+                    fade = 0.5 * (1 - Math.cos(Math.PI * distanceToFront / fadeWidth));
+                }}
+
+                if (mode === "Undamped") {{
+                    y = fade * A * Math.sin(omega * t - omega * x);
+                }} else if (mode === "Damped") {{
+                    y = fade * A * Math.exp(-beta * x) * Math.sin(omega * t - omega * x);
+                }} else if (mode === "Overdamped") {{
+                    y = fade * A * Math.exp(-beta * x);
+                }}
             }}
+
             oscPoints[i].set(x, y, 0);
         }}
+
         oscGeometry.setFromPoints(oscPoints);
-
-        // Update particle and tail
-        const endY = oscPoints[pointCount - 1].y;
-        particle.position.set(0, endY, 0);
-       
-        
-
-        // Render with controls
-        controls.update();
-        renderer.render(scene, camera);
-        requestAnimationFrame(renderLoop);
     }}
-    renderLoop();
+
+    controls.update();
+    renderer.render(scene, camera);
+}}
+
+// Button controls
+function play() {{
+    clock.start();
+    isPlaying = true;
+}}
+
+function pause() {{
+    clock.stop();
+    isPlaying = false;
 }}
 
 animate();
 </script>
+
 </body>
 </html>
 """
