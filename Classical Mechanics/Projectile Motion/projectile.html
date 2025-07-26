@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Projectile Motion</title>
+  <link rel="stylesheet" href="Classical Mechanics\Projectile Motion\projectile_style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.js"></script>
+  <script defer src="Classical Mechanics\Projectile Motion\projectile.js"></script>
+</head>
+<body>
+  <h2>Projectile Motion Simulation</h2>
+  <div id="sketch-holder"></div>
+
+  <script>
+    window.addEventListener("message", (event) => {
+      if (event.data?.type === "streamlit:update") {
+        const { velocity, angle, height, gravity } = event.data.args;
+        updateSimulation(velocity, angle, height, gravity);
+      }
+    });
+  </script>
+</body>
+</html>
