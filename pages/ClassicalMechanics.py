@@ -36,13 +36,13 @@ csspath = pathlib.Path("style.css")
 load_css(csspath)
 
 st.markdown("""<div>
-<div style="position: absolute; top: 280px; left: 130px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+<div style="position: absolute; top: 300px; left: 192px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
     <a href="Classical Mechanics/VectorFields" target="_self" class="button-container">Vector Fields</a>
 </div>
-<div style="position: absolute; top: 280px; left: 480px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+<div style="position: absolute; top: 300px; left: 640px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
     <a href="Classical Mechanics/OscillationVariations" target="_self" class="button-container">Oscillation Variations</a>
 </div>
-<div style="position: absolute; top: 280px; left: 840px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+<div style="position: absolute; top: 300px; left: 1087px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
     <a href="Classical Mechanics/ProjectileMotion" target="_self" class="button-container">Projectile Motion</a>
 </div>    
 </div>        
