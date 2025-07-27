@@ -51,20 +51,20 @@ def get_base64_image(image_path):
 logo_base64 = get_base64_image("SimuPhysimg.png")
 
 st.markdown(f"""
-<div style="position: absolute; top: 80px; left: 100px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
-  <img src="{logo_base64}" width="500" height="500" />
+<div style="position: absolute; top: -160px; left: 440px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+  <img src="{logo_base64}" width="650" height= "650" />
 </div>
 """, unsafe_allow_html=True)
 
 
 st.markdown("""<div>
-<div style="position: absolute; top: 50px; left: 900px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+<div style="position: absolute; top: 300px; left: 120px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
     <a href="QuantumMechanics" target="_self" class="button-container">Quantum Mechanics</a>
 </div>
-<div style="position: absolute; top: 250px; left: 1250px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+<div style="position: absolute; top: 300px; left: 1160px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
     <a href="Electromagnetism" target="_self" class="button-container">Electromagnetism</a>
 </div>
-<div style="position: absolute; top: 450px; left: 900px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+<div style="position: absolute; top: 450px; left: 640px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
     <a href="ClassicalMechanics" target="_self" class="button-container">Classical Mechanics</a>
 </div>    
             </div>        
