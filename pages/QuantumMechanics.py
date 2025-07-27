@@ -35,10 +35,10 @@ def load_css(file):
 csspath = pathlib.Path("style.css")
 load_css(csspath)
 st.markdown("""<div>
-<div style="position: absolute; top: 280px; left: 300px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+<div style="position: absolute; top: 40vh; left: 20vw; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
     <a href="Quantum Mechanics/Schrödingerwaveequation" target="_self" class="button-container">Schrödinger wave equation</a>
 </div>
-<div style="position: absolute; top: 280px; left: 1000px; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+<div style="position: absolute; top: 40vh; left: 60vw; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
     <a href="Quantum Mechanics/QuantumFourierTransform" target="_self" class="button-container">Quantum Fourier Transform</a>
 </div>   
 </div>        
@@ -50,8 +50,8 @@ components.html("""
   position: fixed;
   top: 0;
   left: 0;
-  width: 1534px;
-  height: 800px;
+  width: 100vw;
+  height: 100vh;
   z-index: -1;
   overflow: hidden;
   margin: 0;
