@@ -4,7 +4,6 @@ import streamlit.components.v1 as components
 
 # ---- Streamlit Page Setup ----
 st.set_page_config(
-    page_title="EM Wave Simulation",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -343,18 +342,9 @@ st.markdown("---")
 
 st.header("Anatomy of an EM Wave")
 st.markdown("""
-The plot above shows a simplified, **interactive 3D view** of a plane electromagnetic wave propagating through space. You can **use your mouse to rotate, pan, and zoom** the waveform below.
-- The **<span style="color: #FFEE00;">Electric Field (E)</span>** (yellow tube) oscillates vertically.
-- The **<span style="color: #FF69B4;">Magnetic Field (B)</span>** (pink tube) oscillates horizontally.
-- The grid plane helps visualize the spatial orientation. Notice that the E and B fields are always **in phase** and **perpendicular** to each other and to the direction of propagation.
-- The **Amplitude** and **Frequency** sliders control the properties of this wave, just like they do for the 3D simulation.
+The plot above shows a simplified, **interactive 3D view** of a plane electromagnetic wave propagating through space.
+- The Electric Field (E) (yellow tube) oscillates vertically.
+- The Magnetic Field (B) (pink tube) oscillates horizontally.
+- Notice that the E and B fields are always **in phase** and **perpendicular** to each other and to the direction of propagation.
 """)
 st.markdown("---")
-
-st.header("Field Guide")
-st.markdown("""
-- **<span style="color: #3399ff;">Blue Sphere</span>**: A charged particle oscillating vertically. Its motion is determined by the **Amplitude** and **Frequency** sliders.
-- **<span style="color: #FFEE00;">Yellow Arrows</span>**: The **Electric Field ($\\\vec{E}$)**, which oscillates vertically.
-- **<span style="color: #FF69B4;">Pink Arrows</span>**: The **Magnetic Field ($\\\vec{B}$)**, which oscillates tangentially.
-- **<span style="color: #AAAAAA;">Grey Rings</span>**: The wave front propagating outward at a constant speed $c$.
-""")
