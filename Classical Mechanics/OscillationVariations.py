@@ -7,7 +7,7 @@ st.title("🎵 Oscillation Types: Damped and Undamped")
 
 # Sidebar controls
 with st.sidebar:
-    st.header("Oscillation Parameters")
+    st.header("⚙️ Oscillation Parameters")
     A = st.slider("Amplitude (A)", 0.1, 2.0, 1.0, 0.1)
     omega = st.slider("Angular Frequency (ω)", 0.5, 10.0, 2.0, 0.1)
     beta = st.slider("Damping Coefficient (β)", 0.0, 2.0, 0.1, 0.1)
