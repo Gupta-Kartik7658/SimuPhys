@@ -151,3 +151,19 @@ animate();
 
 # Render the HTML
 components.html(html_code, height=600)
+
+
+# Add summary write-up
+st.markdown("---")
+st.markdown("### 📌 Key Takeaways:")
+st.markdown("""
+- **Amplitude (A)**: Controls how tall the oscillations are.
+- **Angular Frequency (ω)**: Determines the speed of oscillation.
+- **Damping Coefficient (β)**: Affects how quickly the wave fades out.
+- **Modes**:
+  - **Undamped**: Pure sinusoidal wave with no decay.
+  - **Damped**: Oscillations fade over distance.
+  - **Overdamped**: No oscillation, only exponential decay.
+- Interactive **3D visualization** using Three.js.
+- Use **play/pause** buttons and **mouse** to explore wave behavior.
+""")
