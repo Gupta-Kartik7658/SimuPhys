@@ -18,6 +18,16 @@ force_full_width_style = """
                 #MainMenu {visibility: hidden;}
                 footer {visibility: hidden;}
                 header {visibility: hidden;}
+                stSidebar st-emotion-cache-mn9soh e1quxfqw0 {display: None;, visibility: hidden;}
+                  
+
+                /* Completely hide the sidebar on the homepage */
+                [data-testid="stSidebar"] {
+                    display: none;
+                }
+                [data-testid="collapsedControl"] {
+                    display: none
+                }
 
                 /* Remove all padding and margin from the main block container */
                 .block-container,
