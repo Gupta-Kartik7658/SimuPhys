@@ -4,25 +4,29 @@ import os
 
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
-    page_title="SimuPhys - Classical Mechanics",
-    page_icon="⚙️",
+    page_title="SimuPhys - Explore Simulations",
+    page_icon="🔬",
     layout="wide",
-    initial_sidebar_state="collapsed" 
+    initial_sidebar_state="auto" 
 )
 
 # --- INJECT CUSTOM CSS ---
-# This CSS hides the sidebar and its control button completely on this page.
-hide_sidebar_style = """
+# This CSS ensures the page is full-width and the sidebar is available for navigation.
+force_full_width_style = """
             <style>
                 /* Hide default Streamlit header and footer */
                 #MainMenu {visibility: hidden;}
                 footer {visibility: hidden;}
                 header {visibility: hidden;}
+                stSidebar st-emotion-cache-mn9soh e1quxfqw0 {display: None;, visibility: hidden;}
+                  
 
-                /* Hide the sidebar and the collapse button */
-                [data-testid="stSidebar"],
+                /* Completely hide the sidebar on the homepage */
+                [data-testid="stSidebar"] {
+                    display: none;
+                }
                 [data-testid="collapsedControl"] {
-                    display: none !important;
+                    display: none
                 }
 
                 /* Remove all padding and margin from the main block container */
@@ -46,16 +50,18 @@ hide_sidebar_style = """
                 }
             </style>
             """
-st.markdown(hide_sidebar_style, unsafe_allow_html=True)
+st.markdown(force_full_width_style, unsafe_allow_html=True)
 
 
-# --- LOAD THE CLASSICAL MECHANICS PAGE HTML ---
+# --- LOAD THE SIMULATIONS PAGE HTML ---
+# This assumes the 'pages' folder is at the same level as 'simulations_page.html'
+# A more robust way is to navigate up one directory.
 script_dir = os.path.dirname(os.path.abspath(__file__))
-html_file_path = os.path.join(script_dir, '..', 'classical_mechanics_page.html')
+html_file_path = os.path.join(script_dir, '..', 'simulations_page.html')
 
 try:
     with open(html_file_path, 'r', encoding='utf-8') as f:
         components.html(f.read(), scrolling=False)
 except FileNotFoundError:
-    st.error("Error: classical_mechanics_page.html not found. Make sure it is in the root directory of your project.")
+    st.error("Error: simulations_page.html not found. Make sure it is in the root directory of your project.")
 

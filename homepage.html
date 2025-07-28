@@ -18,47 +18,45 @@
         }
 
         /* --- BODY & BACKGROUND --- */
-        html, body {
+        body {
             font-family: var(--font-family);
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background-color: #000000;
-            width: 100%;
-            height: 100%;
-        }
-        
-        .page-wrapper {
+            background-color: #000000; /* Black background */
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 100%;
-            height: 100%;
-            position: relative;
+            height: 100vh;
         }
 
         #bg-canvas {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0; /* Behind the main container */
         }
 
         /* --- MAIN CONTENT CONTAINER --- */
         .main-container {
-            position: relative;
-            z-index: 1;
+            /* Positioning and Sizing */
+            position: relative; /* Changed from absolute */
+            z-index: 1; /* In front of the canvas */
             width: 90%;
             max-width: 800px;
             padding: 2.5rem;
             box-sizing: border-box;
+            
+            /* Flexbox for centering content inside the card */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
+
+            /* Glassmorphism Effect */
             background: var(--container-bg-color);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -78,7 +76,7 @@
         .subtitle {
             font-size: clamp(1rem, 3vw, 1.5rem);
             font-weight: 400;
-            color: #00aaff;
+            color: #00aaff; /* Keeping the blue accent for the subtitle */
             margin-top: 0.5rem;
             margin-bottom: 2rem;
         }
@@ -120,60 +118,64 @@
     </style>
 </head>
 <body>
-    <div class="page-wrapper">
-        <canvas id="bg-canvas"></canvas>
-        <div class="main-container">
-            <div class="title-container">
-                <h1>SimuPhys ⚛️</h1>
-                <p class="subtitle">An Interactive Platform for Physics Simulation</p>
-            </div>
-            <div class="description">
-                <p>
-                    Welcome to SimuPhys, your digital laboratory for exploring the fundamental principles of the universe. 
-                    From the elegant dance of classical oscillators to the mysterious world of quantum mechanics, 
-                    SimuPhys brings complex physics concepts to life through interactive and intuitive visualizations.
-                </p>
-            </div>
-            <div class="button-container">
-                <a href="/ClassicalMechanics" target="_self" class="cta-button">Explore Simulations</a>
-            </div>
+    <!-- The 3D background canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- The main content that sits on top -->
+    <div class="main-container">
+        <div class="title-container">
+            <h1>SimuPhys ⚛️</h1>
+            <p class="subtitle">An Interactive Platform for Physics Simulation</p>
+        </div>
+        <div class="description">
+            <p>
+                Welcome to SimuPhys, your digital laboratory for exploring the fundamental principles of the universe. 
+                From the elegant dance of classical oscillators to the mysterious world of quantum mechanics, 
+                SimuPhys brings complex physics concepts to life through interactive and intuitive visualizations.
+            </p>
+        </div>
+        <div class="button-container">
+            <a href="/Simulations" target="_self" class="cta-button">Explore Simulations</a>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        let scene, camera, renderer, particles, count = 0;
-        const pageWrapper = document.querySelector('.page-wrapper');
-
-        const isMobile = pageWrapper.clientWidth <= 768;
-        const SEPARATION = isMobile ? 60 : 100;
-        const AMOUNTX = isMobile ? 30 : 50;
-        const AMOUNTY = isMobile ? 30 : 50;
+        // --- SCENE SETUP ---
+        let scene, camera, renderer, mesh;
+        const SEPARATION = 100, AMOUNTX = 50, AMOUNTY = 50;
+        let particles, count = 0;
 
         function init() {
             scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, pageWrapper.clientWidth / pageWrapper.clientHeight, 1, 10000);
-            camera.position.set(0, isMobile ? 350 : 250, isMobile ? 900 : 1000);
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+            // Position camera to look from the side and slightly above
+            camera.position.set(0, 250, 1000);
             camera.lookAt(0, 0, 0);
 
+            // --- PARTICLES / WAVES ---
             const numParticles = AMOUNTX * AMOUNTY;
             const positions = new Float32Array(numParticles * 3);
             const scales = new Float32Array(numParticles);
             const colors = new Float32Array(numParticles * 3);
-            const color1 = new THREE.Color(0x5e17eb);
-            const color2 = new THREE.Color(0x00aaff);
+
+            const color1 = new THREE.Color(0x5e17eb); // Purple
+            const color2 = new THREE.Color(0x00aaff); // Blue
 
             let i = 0, j = 0;
             for (let ix = 0; ix < AMOUNTX; ix++) {
                 for (let iy = 0; iy < AMOUNTY; iy++) {
-                    positions[i] = ix * SEPARATION - ((AMOUNTX * SEPARATION) / 2);
-                    positions[i + 1] = 0;
-                    positions[i + 2] = iy * SEPARATION - ((AMOUNTY * SEPARATION) / 2);
+                    positions[i] = ix * SEPARATION - ((AMOUNTX * SEPARATION) / 2); // x
+                    positions[i + 1] = 0; // y
+                    positions[i + 2] = iy * SEPARATION - ((AMOUNTY * SEPARATION) / 2); // z
+
+                    // Create a color gradient
                     const ratio = ix / AMOUNTX;
                     const mixedColor = color1.clone().lerp(color2, ratio);
                     colors[i] = mixedColor.r;
                     colors[i + 1] = mixedColor.g;
                     colors[i + 2] = mixedColor.b;
+
                     scales[j] = 1;
                     i += 3;
                     j++;
@@ -186,9 +188,13 @@
             geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
             const material = new THREE.ShaderMaterial({
-                uniforms: { color: { value: new THREE.Color(0xffffff) } },
+                uniforms: {
+                    color: { value: new THREE.Color(0xffffff) },
+                },
                 vertexShader: `
                     attribute float scale;
+                    /* The 'attribute vec3 color' is removed from here because 
+                       'vertexColors: true' below adds it automatically. */
                     varying vec3 vColor;
                     void main() {
                         vColor = color;
@@ -211,19 +217,20 @@
             particles = new THREE.Points(geometry, material);
             scene.add(particles);
 
-            renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('#bg-canvas'), antialias: true });
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: document.querySelector('#bg-canvas'),
+                antialias: true 
+            });
             renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.setSize(pageWrapper.clientWidth, pageWrapper.clientHeight);
+            renderer.setSize(window.innerWidth, window.innerHeight);
 
-            // Use ResizeObserver for robust resizing
-            const resizeObserver = new ResizeObserver(onResize);
-            resizeObserver.observe(pageWrapper);
+            window.addEventListener('resize', onWindowResize, false);
         }
 
-        function onResize() {
-            camera.aspect = pageWrapper.clientWidth / pageWrapper.clientHeight;
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
-            renderer.setSize(pageWrapper.clientWidth, pageWrapper.clientHeight);
+            renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
         function animate() {
@@ -234,22 +241,25 @@
         function render() {
             const positions = particles.geometry.attributes.position.array;
             const scales = particles.geometry.attributes.scale.array;
+
             let i = 0, j = 0;
             for (let ix = 0; ix < AMOUNTX; ix++) {
                 for (let iy = 0; iy < AMOUNTY; iy++) {
-                    positions[i + 1] = (Math.sin((ix + count) * 0.3) * 50) + (Math.sin((iy + count) * 0.5) * 50);
-                    scales[j] = (Math.sin((ix + count) * 0.3) + 1) * 4 + (Math.sin((iy + count) * 0.5) + 1) * 4;
+                    // This creates the wave motion
+                    positions[i + 1] = (Math.sin((ix + count) * 0.3) * 50) +
+                                       (Math.sin((iy + count) * 0.5) * 50);
+                    scales[j] = (Math.sin((ix + count) * 0.3) + 1) * 4 +
+                                (Math.sin((iy + count) * 0.5) + 1) * 4;
                     i += 3;
                     j++;
                 }
             }
             particles.geometry.attributes.position.needsUpdate = true;
             particles.geometry.attributes.scale.needsUpdate = true;
-
-            if (!isMobile) {
-                camera.position.y = -200 + Math.sin(count * 0.1) * 100;
-                scene.rotation.y = count * 0.01;
-            }
+            
+            // Move the camera and scene for a dynamic feel
+            camera.position.y = -200 + Math.sin(count * 0.1) * 100;
+            scene.rotation.y = count * 0.01;
 
             renderer.render(scene, camera);
             count += 0.1;

@@ -1,145 +1,70 @@
 import streamlit as st
 import streamlit.components.v1 as components
-import base64
-from PIL import Image
-st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
-st.markdown("""
-<style>
-body {
-  margin: 0 !important;
-  padding: 0 !important;
-}
-html, .main, .block-container {
-  padding: 0 !important;
-  margin: 0 !important;
-}
-</style>
-""", unsafe_allow_html=True)
-st.markdown("""
-<style>
-body {
-  overflow: hidden !important;
-}
-html, .main, .block-container {
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-}
-</style>
-""", unsafe_allow_html=True)
+import os
 
-# Hide sidebar and toggle
-st.markdown("""
-<style>
-    [data-testid="stSidebar"] { display: none !important; }
-    [data-testid="collapsedControl"] { display: none !important; }
-</style>
-""", unsafe_allow_html=True)
+# --- PAGE CONFIGURATION ---
+# Set layout to "wide" and the sidebar to "collapsed" by default.
+st.set_page_config(
+    page_title="SimuPhys - Modern Physics Simulations",
+    page_icon="⚛️",
+    layout="wide",
+    initial_sidebar_state="collapsed" 
+)
 
-# Optional: Load CSS (keep if you want external style)
-def load_css(file):
-    with open(file) as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+# --- INJECT CUSTOM CSS ---
+# This CSS is the definitive fix for removing all Streamlit's default padding/margin and hiding the sidebar.
+force_full_width_style = """
+            <style>
+                /* Hide default Streamlit elements */
+                #MainMenu {visibility: hidden;}
+                footer {visibility: hidden;}
+                header {visibility: hidden;}
+                stSidebar st-emotion-cache-mn9soh e1quxfqw0 {display: None;, visibility: hidden;}
+                  
 
-load_css("style.css")
+                /* Completely hide the sidebar on the homepage */
+                [data-testid="stSidebar"] {
+                    display: none;
+                }
+                [data-testid="collapsedControl"] {
+                    display: none
+                }
 
-def get_base64_image(image_path):
-    with open(image_path, "rb") as img_file:
-        b64_string = base64.b64encode(img_file.read()).decode("utf-8")
-    return f"data:image/png;base64,{b64_string}"  # jpg → jpeg for compatibility
-
-logo_base64 = get_base64_image("SimuPhysimg.png")
-
-st.markdown(f"""
-<div style="position: absolute; top: -20vh; left: 28vw; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
-  <img src="{logo_base64}" width="650" height= "650" />
-</div>
-""", unsafe_allow_html=True)
-
-
-st.markdown("""<div>
-<div style="position: absolute; top: 35vh; left: 10vw; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
-    <a href="QuantumMechanics" target="_self" class="button-container">Quantum Mechanics</a>
-</div>
-<div style="position: absolute; top: 35vh; left: 70vw; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
-    <a href="Electromagnetism" target="_self" class="button-container">Electromagnetism</a>
-</div>
-<div style="position: absolute; top: 50vh; left: 40vw; z-index: 10; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
-    <a href="ClassicalMechanics" target="_self" class="button-container">Classical Mechanics</a>
-</div>    
-            </div>        
-""", unsafe_allow_html=True)
-
-components.html("""
-<div id="three-container" style="
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-"></div>
+                /* Remove all padding and margin from the main block container and its children */
+                .block-container,
+                [data-testid="stVerticalBlock"],
+                .st-emotion-cache-1jicfl2, 
+                .st-emotion-cache-zy6yx3 {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                }
+                
+                /* This targets the top-level container of the main page */
+                .st-emotion-cache-gsx7k2 {
+                    gap: 0 !important; /* Removes the vertical gap between elements */
+                }
+                
+                /* Ensure the iframe itself takes up the full space of its container */
+                iframe {
+                    display: block;
+                    width: 100vw; /* Full viewport width */
+                    height: 100vh; /* Full viewport height */
+                    border: none;
+                }
+            </style>
+            """
+st.markdown(force_full_width_style, unsafe_allow_html=True)
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>
-  const container = document.getElementById("three-container");
-  
-  const c1 = document.getElementById("button-container");
-  const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x7200ab, 0.026);
+# --- LOAD THE SELF-CONTAINED HOMEPAGE ---
+script_dir = os.path.dirname(os.path.abspath(__file__))
+html_file_path = os.path.join(script_dir, 'homepage.html')
 
-  const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-  camera.position.set(0, 10, 20);
-  camera.lookAt(0, 3, 0);
+try:
+    with open(html_file_path, 'r', encoding='utf-8') as f:
+        # We remove the height parameter and set scrolling to False,
+        # letting the CSS above control the iframe's size completely.
+        components.html(f.read(), scrolling=False)
+except FileNotFoundError:
+    st.error("Error: homepage.html not found. Please make sure it is in the same directory as app.py.")
 
-  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-  renderer.setSize(container.clientWidth, container.clientHeight);
-  container.appendChild(renderer.domElement);
-
-  const geometry = new THREE.PlaneGeometry(200, 35, 280, 49);
-  const material = new THREE.MeshBasicMaterial({
-    color: 0x44c6f8,
-    wireframe: true,
-    transparent: true,
-    opacity: 0.45,
-  });
-
-  const grid = new THREE.Mesh(geometry, material);
-  grid.rotation.x = (-Math.PI / 2) * 1.2;
-  scene.add(grid);
-
-  const clock = new THREE.Clock();
-
-  function animateWave() {
-    const time = clock.getElapsedTime();
-    const positions = geometry.attributes.position;
-    for (let i = 0; i < positions.count; i++) {
-      const x = positions.getX(i);
-      const y = positions.getY(i);
-      const waveZ = Math.sin((x + time * 2) * 0.25) * Math.cos((y + time * 2) * 0.25) * 2;
-      positions.setZ(i, waveZ);
-    }
-    positions.needsUpdate = true;
-  }
-
-  function animate() {
-    requestAnimationFrame(animate);
-    animateWave();
-    renderer.render(scene, camera);
-  }
-
-  animate();
-
-  window.addEventListener('resize', () => {
-    const width = container.clientWidth;
-    const height = container.clientHeight;
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-    renderer.setSize(width, height);
-  });
-</script>
-""", height=800,width=1534)
