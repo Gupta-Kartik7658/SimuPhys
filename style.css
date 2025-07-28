@@ -1,74 +1,118 @@
-/* Hide Streamlit sidebar and hamburger menu */
-[data-testid="stSidebar"] {
-    display: none !important;
+/* --- FONT IMPORT --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+/* --- GENERAL STYLING & VARIABLES --- */
+:root {
+    --primary-text-color: #ffffff;
+    --secondary-text-color: #cccccc;
+    --accent-color: #00aaff;
+    --container-bg-color: rgba(20, 20, 30, 0.6); /* Semi-transparent dark blue */
+    --font-family: 'Inter', sans-serif;
 }
 
-[data-testid="collapsedControl"] {
-    display: none !important;
+/* --- BODY & BACKGROUND --- */
+/* This ensures the Streamlit app body has no margin/padding */
+body {
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Hide scrollbars caused by background */
 }
 
-/* Bring Streamlit main content above Three.js background */
-.main .block-container {
-    position: relative;
-    z-index: 10;
-    padding-top: 2rem;
-    text-align: center;
+/* The canvas for the 3D background */
+#bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* Place it behind all other content */
 }
 
-/* Style for page title */
-h1 {
-    color: white;
-    text-shadow: 2px 2px 4px #000000;
-    font-size: 3em;
-    margin-bottom: 2rem;
-}
-
-/* Buttons styling */
-.stButton > button {
-    background-color: rgba(0, 0, 0, 0.6);
-    color: white;
-    font-size: 1.2em;
-    border: none;
-    padding: 10px 25px;
-    border-radius: 12px;
-    transition: all 0.3s ease;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
-    cursor: pointer;
-}
-
-.stButton > button:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-    transform: scale(1.05);
-}
-
-/* Optional: adjust columns layout */
-.css-1kyxreq {
-    justify-content: center;
-    gap: 2rem;
-}
-
-
-
-
-
-.button-container {
-    text-decoration: none; /* Removes the underline */
-    background-color: #001932; /* Button color */
-    color: white;
-    padding: 1.5em; /* Scales with font size */
-    border-radius: 8px;
-    font-size: 1.5rem; /* Responsive font */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease;
-
-    width: 25vw;  /* Responsive width based on viewport */
-    height: 25vw; /* Keeps it square and responsive */
-
-    max-width: 245px;  /* Optional: don't let it grow too large */
-    max-height: 245px;
-
+/* --- MAIN CONTENT CONTAINER --- */
+.main-container {
+    /* Flexbox for centering */
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
+    
+    /* Full viewport height */
+    height: 100vh;
+    padding: 2rem;
+    box-sizing: border-box; /* Include padding in height calculation */
+
+    /* Glassmorphism Effect */
+    background: var(--container-bg-color);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* For Safari */
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    /* Positioning and Sizing */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 800px; /* Max width for larger screens */
+    height: auto; /* Height adjusts to content */
+    min-height: 50vh;
+}
+
+/* --- TEXT STYLING --- */
+.title-container h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem); /* Responsive font size */
+    font-weight: 700;
+    color: var(--primary-text-color);
+    margin: 0;
+    letter-spacing: -2px;
+}
+
+.subtitle {
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    font-weight: 400;
+    color: var(--accent-color);
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.description p {
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    color: var(--secondary-text-color);
+    line-height: 1.6;
+    max-width: 600px; /* Keep description text readable */
+    margin: 0 auto 2.5rem auto;
+}
+
+/* --- CALL TO ACTION BUTTON --- */
+.cta-button {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: white;
+    background: var(--accent-color);
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 170, 255, 0.4);
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 170, 255, 0.6);
+    background: #00bfff;
+}
+
+/* --- RESPONSIVE ADJUSTMENTS --- */
+@media (max-width: 768px) {
+    .main-container {
+        width: 90%;
+        padding: 1.5rem;
+    }
+
+    .title-container h1 {
+        letter-spacing: -1px;
+    }
 }
