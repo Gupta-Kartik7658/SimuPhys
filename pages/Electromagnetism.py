@@ -14,30 +14,25 @@ st.set_page_config(
 # This CSS hides the sidebar and its control button completely on this page.
 hide_sidebar_style = """
             <style>
-                /* Hide default Streamlit header and footer */
+                /* Hide default Streamlit elements */
                 #MainMenu {visibility: hidden;}
                 footer {visibility: hidden;}
                 header {visibility: hidden;}
 
-                /* Hide the sidebar and the collapse button */
-                [data-testid="stSidebar"],
-                [data-testid="collapsedControl"] {
-                    display: none !important;
+                /* Completely hide the sidebar */
+                [data-testid="stSidebar"] {
+                    display: none;
                 }
 
-                /* Remove all padding and margin from the main block container */
-                .block-container,
-                [data-testid="stVerticalBlock"],
-                .st-emotion-cache-1jicfl2, 
-                .st-emotion-cache-zy6yx3 {
+                .block-container {
                     padding: 0 !important;
                     margin: 0 !important;
                 }
                 
-                .st-emotion-cache-gsx7k2 {
+                [data-testid="stVerticalBlock"] {
                     gap: 0 !important;
                 }
-                
+
                 iframe {
                     display: block;
                     width: 100vw;

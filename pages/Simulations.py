@@ -11,51 +11,41 @@ st.set_page_config(
 )
 
 # --- INJECT CUSTOM CSS ---
-# This CSS ensures the page is full-width and the sidebar is available for navigation.
-force_full_width_style = """
+# This CSS ensures the page is full-width but keeps the sidebar available for navigation.
+robust_style_with_sidebar = """
             <style>
                 /* Hide default Streamlit header and footer */
                 #MainMenu {visibility: hidden;}
                 footer {visibility: hidden;}
                 header {visibility: hidden;}
-                stSidebar st-emotion-cache-mn9soh e1quxfqw0 {display: None;, visibility: hidden;}
-                  
 
                 /* Completely hide the sidebar on the homepage */
                 [data-testid="stSidebar"] {
                     display: none;
                 }
-                [data-testid="collapsedControl"] {
-                    display: none
-                }
-
+                
                 /* Remove all padding and margin from the main block container */
-                .block-container,
-                [data-testid="stVerticalBlock"],
-                .st-emotion-cache-1jicfl2, 
-                .st-emotion-cache-zy6yx3 {
+                .block-container {
                     padding: 0 !important;
                     margin: 0 !important;
                 }
                 
-                .st-emotion-cache-gsx7k2 {
+                [data-testid="stVerticalBlock"] {
                     gap: 0 !important;
                 }
                 
                 iframe {
                     display: block;
-                    width: 100vw;
+                    width: 100%; /* Use 100% instead of 100vw to respect the sidebar */
                     height: 100vh;
                     border: none;
                 }
             </style>
             """
-st.markdown(force_full_width_style, unsafe_allow_html=True)
+st.markdown(robust_style_with_sidebar, unsafe_allow_html=True)
 
 
 # --- LOAD THE SIMULATIONS PAGE HTML ---
-# This assumes the 'pages' folder is at the same level as 'simulations_page.html'
-# A more robust way is to navigate up one directory.
 script_dir = os.path.dirname(os.path.abspath(__file__))
 html_file_path = os.path.join(script_dir, '..', 'simulations_page.html')
 
