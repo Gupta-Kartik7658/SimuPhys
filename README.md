@@ -1,6 +1,6 @@
 # SimuPhys ⚛️
 
-![SimuPhys Logo](Presentation/Logo04.jpg)
+![SimuPhys Logo](SimuPhysimg.png)
 
 **An Interactive Toolkit for Visualizing Classical and Quantum Physics Simulations**
 
@@ -32,18 +32,6 @@ The application is built using Python and a combination of powerful open-source 
 * **Quantum Computing:** Qiskit
 * **Web Framework:** Streamlit
 * **UI/UX:** HTML, CSS, JavaScript, Three.js
-
-## 🏛️ System Architecture
-
-The system is designed with a modular architecture, separating the core logic from the user interface and visualization layers.
-
-![System Architecture](Presentation/System%20Architecture.png)
-
-* **UI Layer:** Built with Streamlit for the web interface and PyQt5 for a potential local GUI.
-* **Visualization Layer:** Utilizes Plotly, Matplotlib, and Manim to create interactive plots and animations.
-* **Calculation Engine:** Powered by NumPy and SciPy for efficient numerical computations.
-* **Simulation Layer:** Uses SymPy and Manim for symbolic mathematics and simulation logic.
-* **Quantum Module:** Leverages Qiskit for quantum computations and simulations.
 
 ## 🏁 Getting Started
 
