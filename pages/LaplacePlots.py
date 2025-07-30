@@ -5,6 +5,14 @@ import sympy as sp
 from scipy.integrate import quad, IntegrationWarning
 import warnings
 
+# --- Page Configuration (should be called only once) ---
+st.set_page_config(
+    page_title="SimuPhys - Laplace Equation Solver",
+    page_icon="SimuPhysimg.png",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+
 # Suppress warnings from the integration function
 warnings.filterwarnings("ignore", category=UserWarning)
 warnings.filterwarnings("ignore", category=IntegrationWarning)
@@ -100,13 +108,16 @@ def solve_laplace_complete(a, b, nx, ny, terms, boundary_funcs):
             
             V += V_term
         latex_eqn = r"V(x,y) = \frac{4V_0}{\pi} \sum_{n=1,3,5,...} \frac{1}{n} \frac{\cosh(n\pi x/a)}{\cosh(n\pi b/a)} \sin(n\pi y/a)"
-        parameter_desc = f"Solution for $V(x, y=\pm a)=0$ and $V(\pm b, y)=V_0$, with $V_0 = {V0_const:.2f}$"
+        # Using a raw f-string (fr"...") prevents syntax warnings for LaTeX commands like \pm
+        parameter_desc = fr"Solution for $V(x, y=\pm a)=0$ and $V(\pm b, y)=V_0$, with $V_0 = {V0_const:.2f}$"
     else:
         if callable(V_x0_func) and "v_nought" in V_x0_func.__name__:
             for n in range(1, terms + 1):
                 Cn = calculate_Cn(n, a, b, V_x0_func)
                 term = Cn * np.sin(n * np.pi * Y / a) * np.exp(-n * np.pi * np.abs(X) / a)
                 V += term
+            # This is a raw string (r"...") which is the correct way to handle backslashes in LaTeX.
+            # Any remaining warnings from your linter or environment on this line can likely be ignored.
             latex_eqn = r"V(x,y) = \sum_{n=1}^{\infty} C_n \sin(n\pi y/a)e^{-n\pi|x|/a}"
             parameter_desc = r"Solution for potential on center line"
         else:
@@ -118,7 +129,6 @@ def solve_laplace_complete(a, b, nx, ny, terms, boundary_funcs):
 
 
 # --- Streamlit UI ---
-st.set_page_config(layout="wide")
 st.title("⚡️ 2D Laplace Equation Solver")
 st.write("This tool solves the Laplace equation $\nabla^2V = 0$ in a 2D rectangular domain with specified boundary conditions.")
 
@@ -170,7 +180,7 @@ else:
 
 st.markdown("---")
 
-# --- NEW: Expandable Theory and How-To Sections ---
+# --- Expandable Theory and How-To Sections ---
 with st.expander("📖 Theory: Solving Laplace's Equation", expanded=False):
     st.subheader("The Laplace Equation")
     st.write("The 2D Laplace equation is a fundamental partial differential equation that describes the behavior of potentials (e.g., electric, gravitational, temperature) in a steady state and in a region with no sources. It is written as:")
