@@ -4,19 +4,61 @@ import streamlit.components.v1 as components
 # Streamlit UI configuration
 st.set_page_config(page_title="Oscillation Visualizer", layout="wide")
 st.title("🎵 Oscillation Types with Synchronized 3D Object")
-st.markdown("Adjust the parameters in the sidebar to see how they affect both the wave and the motion of the box.")
+robust_style = """
+            <style>
+                /* Hide default Streamlit elements */
+                #MainMenu {visibility: hidden;}
+                footer {visibility: hidden;}
+                header {visibility: hidden;}
+
+                /* Completely hide the sidebar on the homepage */
+                [data-testid="stSidebar"] {
+                    display: none;
+                }
+
+                /* Target the main container and remove its padding */
+                .block-container {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                }
+                
+                /* This is the key to removing the top gap */
+                [data-testid="stVerticalBlock"] {
+                    gap: 0 !important;
+                }
+
+                /* Ensure the iframe itself takes up the full space */
+                iframe {
+                    display: block;
+                    width: 100vw;
+                    height: 100vh;
+                    border: none;
+                }
+            </style>
+            """
+st.markdown(robust_style, unsafe_allow_html=True)
 
 
-# Sidebar controls
-with st.sidebar:
-    st.header("⚙️ Oscillation Parameters")
-    A = st.slider("Amplitude (A)", 0.1, 5.0, 2.0, 0.1)
-    omega = st.slider("Angular Frequency (ω)", 0.5, 10.0, 3.0, 0.1)
-    beta = st.slider("Damping Coefficient (β)", 0.0, 2.0, 0.5, 0.1)
-    mode = st.selectbox("Mode", ["Undamped", "Damped", "Overdamped"])
+st.markdown("Adjust the parameters below to see how they affect both the wave and the motion of the box.")
+
+st.markdown("---")
+
+# --- Main app controls ---
+st.header("⚙️ Oscillation Parameters")
+col1, col2 = st.columns(2)
+
+with col1:
+    A = st.slider("Amplitude (A)", 0.1, 5.0, 2.0, 0.1, key="amplitude")
+    omega = st.slider("Angular Frequency (ω)", 0.5, 10.0, 3.0, 0.1, key="omega")
+
+with col2:
+    beta = st.slider("Damping Coefficient (β)", 0.0, 2.0, 0.5, 0.1, key="beta")
+    mode = st.selectbox("Mode", ["Undamped", "Damped", "Overdamped"], key="mode")
+
+st.markdown("---")
+
 
 # Embed HTML + Three.js
-# I've replaced the cylinder with a realistic, animated helix spring.
 html_code = f"""
 <!DOCTYPE html>
 <html>
@@ -71,6 +113,7 @@ const mode = "{mode}";
 
 // Animation state
 let isPlaying = true;
+let totalElapsedTime = 0;
 const waveSpeed = 4.0;
 
 // --- Scene Setup ---
@@ -121,7 +164,6 @@ box.position.set(0, A, 0);
 scene.add(box);
 
 // --- The Spring ---
-// Function to create a helix geometry
 function createSpringGeometry(radius, height, coils, tubularSegments, radialSegments, tubeRadius) {{
     const points = [];
     for (let i = 0; i <= tubularSegments; i++) {{
@@ -134,7 +176,6 @@ function createSpringGeometry(radius, height, coils, tubularSegments, radialSegm
     const path = new THREE.CatmullRomCurve3(points);
     const geometry = new THREE.TubeGeometry(path, tubularSegments, tubeRadius, radialSegments, false);
     
-    // Store original data for animation
     geometry.userData.originalPositions = geometry.attributes.position.clone();
     geometry.userData.originalHeight = height;
 
@@ -145,10 +186,8 @@ const springRestHeight = 2.0;
 const springGeometry = createSpringGeometry(0.25, springRestHeight, 10, 256, 8, 0.05);
 const springMaterial = new THREE.MeshStandardMaterial({{ color: 0xcccccc, metalness: 0.8, roughness: 0.3 }});
 const spring = new THREE.Mesh(springGeometry, springMaterial);
-// Position the top of the spring at the bottom of the roof
 spring.position.y = roofYPosition - 0.25;
 scene.add(spring);
-
 
 // --- The Wave (Line) ---
 const pointCount = 500;
@@ -164,15 +203,13 @@ const oscLine = new THREE.Line(oscGeometry, oscMaterial);
 scene.add(oscLine);
 
 // --- Animation Logic ---
-const clock = new THREE.Clock();
+const clock = new THREE.Clock(); 
 
 function updateSpring() {{
     const boxTopY = box.position.y + boxSize / 2;
     const roofBottomY = roofYPosition - 0.25;
-
     const currentHeight = roofBottomY - boxTopY;
     
-    // Animate by manipulating vertices for a realistic stretch/compress effect
     const originalHeight = spring.geometry.userData.originalHeight;
     const scaleFactor = currentHeight / originalHeight;
     
@@ -189,10 +226,11 @@ function updateSpring() {{
 
 function animate() {{
     requestAnimationFrame(animate);
-    const t = clock.getElapsedTime();
 
     if (isPlaying) {{
-        // 1. Calculate the oscillator's (box's) current Y position based on time.
+        totalElapsedTime += clock.getDelta();
+        const t = totalElapsedTime;
+
         let boxY = 0;
         if (mode === "Undamped") {{
             boxY = A * Math.cos(omega * t);
@@ -203,10 +241,8 @@ function animate() {{
         }}
         box.position.y = boxY;
 
-        // 2. Update the spring to connect the roof and the box
         updateSpring();
 
-        // 3. Generate the wave based on the oscillator's history.
         for (let i = 0; i < pointCount; i++) {{
             const x = oscPoints[i].x;
             const timeAtPoint = t - (x / waveSpeed);
@@ -223,8 +259,6 @@ function animate() {{
             }}
             oscPoints[i].y = y;
         }}
-
-        // Update the line geometry
         oscGeometry.setFromPoints(oscPoints);
     }}
 
@@ -235,7 +269,7 @@ function animate() {{
 // --- UI Controls ---
 function play() {{
     if (!isPlaying) {{
-        clock.start();
+        clock.start(); 
         isPlaying = true;
     }}
 }}
@@ -248,14 +282,9 @@ function pause() {{
 }}
 
 function reset() {{
+    isPlaying = false; 
     clock.stop();
-    clock.start();
-    if(isPlaying) {{
-        // keep it running if it was
-    }} else {{
-        // pause it if it was paused
-        clock.stop();
-    }}
+    totalElapsedTime = 0;
     
     box.position.y = A;
     updateSpring();
@@ -265,11 +294,8 @@ function reset() {{
     }}
     oscGeometry.setFromPoints(oscPoints);
 
-    if (!isPlaying) {{
-        renderer.render(scene, camera);
-    }}
+    renderer.render(scene, camera);
 }}
-
 
 // --- Handle Window Resize ---
 window.addEventListener('resize', () => {{
@@ -278,11 +304,8 @@ window.addEventListener('resize', () => {{
     renderer.setSize(window.innerWidth, window.innerHeight);
 }});
 
-// Set initial state of the spring before starting animation
 box.position.y = A;
 updateSpring();
-
-// Start the animation
 animate();
 </script>
 
@@ -291,18 +314,28 @@ animate();
 """
 
 # Render the HTML component in Streamlit
-components.html(html_code, height=700, scrolling=False)
+components.html(html_code, height=600, scrolling=False)
 
 # Add summary write-up
 st.markdown("---")
-st.markdown("### 📌 How It Works (Corrected Physics):")
+st.header("The Science of Oscillation")
 st.markdown("""
-- **Realistic Spring**: The simple cylinder has been replaced with a helical spring that stretches and compresses realistically by changing the distance between its coils.
-- **Stationary Oscillator**: The box now behaves like a true oscillator, moving vertically at a fixed position (`x=0`).
-- **Time-Based Damping**: The damping effect correctly reduces the box's oscillation amplitude over *time*, not distance.
-- **Propagating Wave**: The line graph represents the history of the box's motion, propagating outwards from the oscillator.
-- **Corrected Modes**:
-  - **Undamped**: The box oscillates with a constant amplitude.
-  - **Damped**: The box's oscillations slowly fade out over time.
-  - **Overdamped**: The box returns smoothly to its equilibrium point without oscillating.
+This simulation demonstrates three fundamental types of mechanical oscillation, governed by the interplay between a restoring force (from the spring) and a damping force (like air resistance).
+""")
+
+st.subheader("Undamped Oscillation")
+st.markdown("""
+In an ideal, frictionless world, an oscillator exhibits **Simple Harmonic Motion (SHM)**. The system's total mechanical energy is conserved, causing it to oscillate with a constant amplitude ($A$) and a single, natural frequency ($\omega$). The displacement is described by:
+$$ x(t) = A \cos(\omega t) $$
+""")
+
+st.subheader("Damped Oscillation")
+st.markdown("""
+In reality, dissipative forces cause the oscillation's energy to decrease. The amplitude is no longer constant but decays exponentially over time due to the **damping coefficient** ($beta$). The system still oscillates, but its swings get progressively smaller until it stops. The equation is:
+$$ x(t) = A e^{-beta t} \cos(\omega' t) $$
+""")
+
+st.subheader("Overdamped Oscillation")
+st.markdown("""
+When the damping force is very strong (a large $beta$), the system is **overdamped**. It returns to equilibrium as quickly as possible *without oscillating at all*. Imagine a pendulum trying to swing through thick honey; it would simply ooze back to the center without overshooting.
 """)
