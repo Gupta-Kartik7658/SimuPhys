@@ -1,54 +1,76 @@
-
 import streamlit as st
 import streamlit.components.v1 as components
 
 # ---- Streamlit Page Setup ----
 st.set_page_config(
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 st.title("⚡ Visualizing Electromagnetic Waves")
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            [data-testid="stSidebar"] {
+                    display: none;
+                }
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
+
 st.markdown(
     "This interactive 3D simulation shows how an oscillating charge emits electromagnetic waves. "
-    "Use the controls in the sidebar to change the wave's properties and your mouse to explore the 3D scene."
+    "Use the controls below to change the wave's properties and your mouse to explore the 3D scene."
 )
 
-# ---- Unified Sidebar Controls ----
-st.sidebar.header("⚙️ Simulation Controls")
-st.sidebar.info(
+st.markdown("---")
+
+# ---- Top Controls Section ----
+st.header("⚙️ Simulation Controls")
+st.info(
     "Adjusting a slider will restart the animation with the new value."
 )
 
-amplitude = st.sidebar.slider(
-    "Amplitude (A)",
-    min_value=0.5,
-    max_value=5.0,
-    value=2.5,
-    step=0.1,
-    help="Controls how far the charge moves. This affects the wave's strength."
-)
+# Create three columns for the sliders to sit side-by-side
+c1, c2, c3 = st.columns(3)
 
-frequency = st.sidebar.slider(
-    "Frequency (ω)",
-    min_value=0.5,
-    max_value=5.0,
-    value=2.0,
-    step=0.1,
-    help="Controls how fast the charge oscillates. This affects the wavelength."
-)
+with c1:
+    amplitude = st.slider(
+        "Amplitude (A)",
+        min_value=0.5,
+        max_value=5.0,
+        value=2.5,
+        step=0.1,
+        help="Controls how far the charge moves. This affects the wave's strength."
+    )
 
-grid_density = st.sidebar.slider(
-    "Field Grid Density",
-    min_value=10,
-    max_value=40,
-    value=25,
-    step=1,
-    help="Controls how many field vectors are displayed."
-)
+with c2:
+    frequency = st.slider(
+        "Frequency (ω)",
+        min_value=0.5,
+        max_value=5.0,
+        value=2.0,
+        step=0.1,
+        help="Controls how fast the charge oscillates. This affects the wavelength."
+    )
 
-# ---- Three.js Component ----
-# This f-string contains the HTML, CSS, and JavaScript for both the main 3D scene and the bottom subplot.
+with c3:
+    grid_density = st.slider(
+        "Field Grid Density",
+        min_value=10,
+        max_value=40,
+        value=25,
+        step=1,
+        help="Controls how many field vectors are displayed."
+    )
+
+st.markdown("---")
+
+
+# ---- Bottom Animation Section ----
+# This f-string contains the HTML, CSS, and JavaScript.
 three_js_component = f"""
 <!DOCTYPE html>
 <html lang="en">
@@ -57,19 +79,15 @@ three_js_component = f"""
     <title>Electromagnetic Wave Simulation</title>
     <style>
         body {{ margin: 0; overflow: hidden; background: black; font-family: sans-serif; }}
+        
+        /* These containers will now take the full width of the page area */
         #main-container {{
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: calc(100% - 160px); /* Leave space for subplot */
+            height: 560px; /* Fixed height for the main animation */
         }}
         #subplot-container {{
-            position: absolute;
-            bottom: 0;
-            left: 0;
             width: 100%;
-            height: 300px; /* Height of the subplot */
+            height: 300px; /* Fixed height for the subplot */
             background-color: #080808;
             border-top: 2px solid #333;
             cursor: grab;
@@ -185,7 +203,6 @@ three_js_component = f"""
             }}
         }}
 
-
         function animateMainScene(t) {{
             controls.update();
             charge.position.y = A * Math.sin(w * t);
@@ -242,7 +259,6 @@ three_js_component = f"""
         rendererSub.setSize(subContainer.clientWidth, subContainer.clientHeight);
         subContainer.appendChild(rendererSub.domElement);
 
-        // ** NEW: Add OrbitControls for the subplot **
         const controlsSub = new THREE.OrbitControls(cameraSub, rendererSub.domElement);
         controlsSub.enableDamping = true;
         controlsSub.dampingFactor = 0.1;
@@ -278,7 +294,6 @@ three_js_component = f"""
         sceneSub.add(eWave, bWave);
 
         function animateSubplot(t) {{
-            // ** NEW: Update subplot controls **
             controlsSub.update();
 
             const subplot_A = A * 0.4;
@@ -304,7 +319,6 @@ three_js_component = f"""
 
             rendererSub.render(sceneSub, cameraSub);
         }}
-
 
         // ====================================================================
         // --- GLOBAL ANIMATION LOOP & RESIZE ---
@@ -333,13 +347,13 @@ three_js_component = f"""
 </html>
 """
 
-# Render the HTML component in the main body of the Streamlit app
-# Increased height to 860px to accommodate the subplot (700px for main + 160px for sub)
+# Render the HTML component below the controls
+# Set height to accommodate both the main scene (560px) and subplot (300px)
 components.html(three_js_component, height=860)
+
 
 # ---- Explanation Section ----
 st.markdown("---")
-
 st.header("Anatomy of an EM Wave")
 st.markdown("""
 The plot above shows a simplified, **interactive 3D view** of a plane electromagnetic wave propagating through space.

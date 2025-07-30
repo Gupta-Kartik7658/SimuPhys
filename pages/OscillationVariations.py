@@ -3,44 +3,22 @@ import streamlit.components.v1 as components
 
 # Streamlit UI configuration
 st.set_page_config(page_title="Oscillation Visualizer", layout="wide")
-st.title("🎵 Oscillation Types with Synchronized 3D Object")
-robust_style = """
+
+# --- CSS to hide the default Streamlit sidebar/menu ---
+hide_st_style = """
             <style>
-                /* Hide default Streamlit elements */
-                #MainMenu {visibility: hidden;}
-                footer {visibility: hidden;}
-                header {visibility: hidden;}
-
-                /* Completely hide the sidebar on the homepage */
-                [data-testid="stSidebar"] {
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            [data-testid="stSidebar"] {
                     display: none;
-                }
-
-                /* Target the main container and remove its padding */
-                .block-container {
-                    padding: 0 !important;
-                    margin: 0 !important;
-                }
-                
-                /* This is the key to removing the top gap */
-                [data-testid="stVerticalBlock"] {
-                    gap: 0 !important;
-                }
-
-                /* Ensure the iframe itself takes up the full space */
-                iframe {
-                    display: block;
-                    width: 100vw;
-                    height: 100vh;
-                    border: none;
                 }
             </style>
             """
-st.markdown(robust_style, unsafe_allow_html=True)
+st.markdown(hide_st_style, unsafe_allow_html=True)
 
-
+st.title("🎵 Oscillation Types with Synchronized 3D Object")
 st.markdown("Adjust the parameters below to see how they affect both the wave and the motion of the box.")
-
 st.markdown("---")
 
 # --- Main app controls ---
@@ -314,7 +292,8 @@ animate();
 """
 
 # Render the HTML component in Streamlit
-components.html(html_code, height=600, scrolling=False)
+# The height is changed from 600 to 500 to make the component smaller.
+components.html(html_code, height=500, scrolling=False)
 
 # Add summary write-up
 st.markdown("---")
@@ -331,11 +310,11 @@ $$ x(t) = A \cos(\omega t) $$
 
 st.subheader("Damped Oscillation")
 st.markdown("""
-In reality, dissipative forces cause the oscillation's energy to decrease. The amplitude is no longer constant but decays exponentially over time due to the **damping coefficient** ($beta$). The system still oscillates, but its swings get progressively smaller until it stops. The equation is:
-$$ x(t) = A e^{-beta t} \cos(\omega' t) $$
+In reality, dissipative forces cause the oscillation's energy to decrease. The amplitude is no longer constant but decays exponentially over time due to the **damping coefficient** ($\beta$). The system still oscillates, but its swings get progressively smaller until it stops. The equation is:
+$$ x(t) = A e^{-\\beta t} \cos(\omega' t) $$
 """)
 
 st.subheader("Overdamped Oscillation")
 st.markdown("""
-When the damping force is very strong (a large $beta$), the system is **overdamped**. It returns to equilibrium as quickly as possible *without oscillating at all*. Imagine a pendulum trying to swing through thick honey; it would simply ooze back to the center without overshooting.
+When the damping force is very strong (a large $\beta$), the system is **overdamped**. It returns to equilibrium as quickly as possible *without oscillating at all*. Imagine a pendulum trying to swing through thick honey; it would simply ooze back to the center without overshooting.
 """)
