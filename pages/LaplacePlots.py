@@ -130,7 +130,8 @@ def solve_laplace_complete(a, b, nx, ny, terms, boundary_funcs):
 
 # --- Streamlit UI ---
 st.title("⚡️ 2D Laplace Equation Solver")
-st.write("This tool solves the Laplace equation $\nabla^2V = 0$ in a 2D rectangular domain with specified boundary conditions.")
+st.write("This tool solves the Laplace equation in a 2D rectangular domain with specified boundary conditions.")
+st.latex(r"\nabla^2 V = 0")
 
 # --- Inputs ---
 st.header("1. Domain and Simulation Parameters")
