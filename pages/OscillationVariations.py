@@ -33,6 +33,7 @@ with col2:
     beta = st.slider("Damping Coefficient (β)", 0.0, 2.0, 0.5, 0.1, key="beta")
     mode = st.selectbox("Mode", ["Undamped", "Damped", "Overdamped"], key="mode")
 
+
 st.markdown("---")
 
 
@@ -292,29 +293,64 @@ animate();
 """
 
 # Render the HTML component in Streamlit
-# The height is changed from 600 to 500 to make the component smaller.
 components.html(html_code, height=500, scrolling=False)
 
-# Add summary write-up
+# --- Theory and instructions expanders ---
 st.markdown("---")
-st.header("The Science of Oscillation")
-st.markdown("""
-This simulation demonstrates three fundamental types of mechanical oscillation, governed by the interplay between a restoring force (from the spring) and a damping force (like air resistance).
-""")
 
-st.subheader("Undamped Oscillation")
-st.markdown("""
-In an ideal, frictionless world, an oscillator exhibits **Simple Harmonic Motion (SHM)**. The system's total mechanical energy is conserved, causing it to oscillate with a constant amplitude ($A$) and a single, natural frequency ($\omega$). The displacement is described by:
-$$ x(t) = A \cos(\omega t) $$
-""")
+with st.expander("🔬 The Science of Oscillation"):
+    st.markdown("""
+    The motion of the mass-on-a-spring system is described by a second-order linear homogeneous differential equation, derived from Newton's second law, $F=ma$. The net force is the sum of the spring's restoring force ($-kx$) and the damping force ($-c\\frac{dx}{dt}$), where 'c' is the damping coefficient.
+    """)
+    st.subheader("The Governing Equation")
+    st.markdown("""
+    This gives us the general equation for a damped harmonic oscillator:
+    $$ m\\frac{d^2x}{dt^2} + c\\frac{dx}{dt} + kx = 0 $$
+    By redefining the constants, we can analyze the solutions for different scenarios.
+    """)
 
-st.subheader("Damped Oscillation")
-st.markdown("""
-In reality, dissipative forces cause the oscillation's energy to decrease. The amplitude is no longer constant but decays exponentially over time due to the **damping coefficient** ($\beta$). The system still oscillates, but its swings get progressively smaller until it stops. The equation is:
-$$ x(t) = A e^{-\\beta t} \cos(\omega' t) $$
-""")
+    st.subheader("Undamped Oscillation")
+    st.markdown("""
+    In an ideal, frictionless system ($c=0$), energy is conserved, leading to **Simple Harmonic Motion (SHM)**. The equation simplifies to:
+    $$ \\frac{d^2x}{dt^2} + \\omega_0^2 x = 0 $$
+    The solution describes a perfect, unending wave with a constant amplitude ($A$) and natural frequency ($\\omega_0$):
+    $$ x(t) = A \\cos(\\omega_0 t) $$
+    """)
 
-st.subheader("Overdamped Oscillation")
-st.markdown("""
-When the damping force is very strong (a large $\beta$), the system is **overdamped**. It returns to equilibrium as quickly as possible *without oscillating at all*. Imagine a pendulum trying to swing through thick honey; it would simply ooze back to the center without overshooting.
-""")
+    st.subheader("Damped Oscillation")
+    st.markdown("""
+    In reality, damping forces ($c > 0$) cause the system to lose energy. The amplitude decays exponentially over time due to the **damping coefficient** ($\\beta = c/2m$). The solution is:
+    $$ x(t) = A e^{-\\beta t} \\cos(\\omega' t) $$
+    Here, the oscillation frequency $\\omega'$ is slightly less than the natural frequency $\\omega_0$.
+    """)
+
+    st.subheader("Overdamped Oscillation")
+    st.markdown("""
+    When damping is very strong, the system returns to equilibrium as quickly as possible *without oscillating at all*. The solution to the differential equation has no sinusoidal component, only decaying exponential terms.
+    """)
+
+    st.header("⏰ The Heartbeat of Technology")
+    st.markdown("""
+    The predictable nature of oscillators is crucial for technology. For instance, a **Quartz Crystal Oscillator** is the timing heart of virtually every computer and smartphone. Its incredibly stable vibrations produce a "clock signal" that acts as a metronome, synchronizing all of the device's operations.
+    """)
+
+with st.expander("📖 How to Use This Simulation"):
+    st.markdown("""
+    - **Adjust the Sliders:**
+        - **Amplitude (A):** Controls the initial height or maximum displacement of the box.
+        - **Angular Frequency (ω):** Controls how fast the box oscillates. Higher values mean faster oscillations.
+        - **Damping Coefficient (β):** Controls how quickly the oscillation loses energy. At `0.0`, it's undamped. Higher values make it stop faster.
+
+    - **Select a Mode:**
+        - **Undamped:** An ideal oscillation that never stops.
+        - **Damped:** A realistic oscillation that gradually fades out.
+        - **Overdamped:** The system returns to the middle without oscillating at all.
+
+    - **Interact with the 3D View:**
+        - **Rotate:** Click and drag with your mouse to rotate the camera.
+        - **Zoom:** Use your mouse scroll wheel to zoom in and out.
+        - **Pan:** Right-click and drag to move the view.
+
+    - **Use the Animation Controls:**
+        - **Play/Pause/Reset** buttons at the bottom control the animation playback.
+    """)
