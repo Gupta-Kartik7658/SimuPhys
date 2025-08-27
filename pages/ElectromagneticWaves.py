@@ -100,13 +100,6 @@ with st.expander("🖱️ How to Use This Simulation"):
 
 st.markdown("---")
 
-# ---- NEW: Titles for the 3D Animations ----
-st.markdown("### 1. Field Visualization of an Oscillating Charge")
-st.markdown("### 2. Waveform Slice of the Propagating EM Wave")
-
-
-# ---- Bottom Animation Section ----
-# This f-string contains the HTML, CSS, and JavaScript.
 three_js_component = f"""
 <!DOCTYPE html>
 <html lang="en">
@@ -119,13 +112,13 @@ three_js_component = f"""
         /* These containers will now take the full width of the page area */
         #main-container {{
             width: 100%;
-            height: 560px; /* Fixed height for the main animation */
+            height: 500px; /* Fixed height for the main animation */
         }}
         #subplot-container {{
             width: 100%;
-            height: 300px; /* Fixed height for the subplot */
+            height: 400px; /* Fixed height for the subplot */
             background-color: #080808;
-            border-top: 2px solid #333;
+            
             cursor: grab;
         }}
         #subplot-container:active {{
@@ -135,7 +128,12 @@ three_js_component = f"""
 </head>
 <body>
     <div id="main-container"></div>
-    <div id="subplot-container"></div>
+
+<h2 style="color:white; text-align:center; margin:12px 0;">
+    Waveform Slice of the Propagating EM Wave
+</h2>
+
+<div id="subplot-container"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
@@ -280,14 +278,16 @@ three_js_component = f"""
             }}
             renderer.render(scene, camera);
         }}
+        document.body.insertAdjacentHTML("afterbegin", "<h2 style='color:white; text-align:center; margin:10px;'>Field Visualization of an Oscillating Charge</h2>");
 
+        
         // ====================================================================
         // --- SUBPLOT 3D WAVEFORM SETUP ---
         // ====================================================================
         const subContainer = document.getElementById('subplot-container');
         const sceneSub = new THREE.Scene();
         const cameraSub = new THREE.PerspectiveCamera(60, subContainer.clientWidth / subContainer.clientHeight, 0.1, 1000);
-        cameraSub.position.set(8, 6, 14);
+        cameraSub.position.set(8, 2, 14);
         cameraSub.lookAt(0, 0, 0);
 
         const rendererSub = new THREE.WebGLRenderer({{ antialias: true }});
@@ -383,18 +383,6 @@ three_js_component = f"""
 </html>
 """
 
-# Render the HTML component below the controls
-# Set height to accommodate both the main scene (560px) and subplot (300px)
-components.html(three_js_component, height=860)
+components.html(three_js_component, height=870)
 
-
-# ---- Explanation Section ----
-st.markdown("---")
-st.header("Anatomy of an EM Wave")
-st.markdown("""
-The plot above shows a simplified, **interactive 3D view** of a plane electromagnetic wave propagating through space.
-- The Electric Field (E) (**yellow tube**) oscillates vertically.
-- The Magnetic Field (B) (**pink tube**) oscillates horizontally.
-- Notice that the E and B fields are always **in phase** and **perpendicular** to each other and to the direction of propagation.
-""")
 st.markdown("---")

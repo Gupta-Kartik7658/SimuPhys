@@ -185,7 +185,7 @@ def main():
             
             with div_col:
                 st.markdown("### Divergence")
-                st.latex(f"\\nabla \\cdot \\vec{{F}} = {latex(div_F)}")
+                st.latex(f"\\vec{{\\nabla}} \\cdot \\vec{{F}} = {latex(div_F)}")
                 fig_div = go.Figure(data=go.Scatter3d(
                     x=Xf, y=Yf, z=Zf, mode='markers',
                     marker=dict(size=6, color=div_vals, colorscale='Viridis', colorbar=dict(title="Div")),
@@ -202,7 +202,7 @@ def main():
                 if curl_x: curl_parts.append(f"({latex(curl_x)}) \\hat{{i}}")
                 if curl_y: curl_parts.append(f"({latex(curl_y)}) \\hat{{j}}")
                 if curl_z: curl_parts.append(f"({latex(curl_z)}) \\hat{{k}}")
-                curl_latex = "\\nabla \\times \\vec{{F}} = " + " + ".join(curl_parts) if curl_parts else "\\nabla \\times \\vec{{F}} = \\vec{0}"
+                curl_latex = "\\vec{\\nabla}  \\times \\vec{{F}} = " + " + ".join(curl_parts) if curl_parts else "\\nabla \\times \\vec{{F}} = \\vec{0}"
                 st.latex(curl_latex)
                 
                 fig_curl = go.Figure(data=go.Cone(
