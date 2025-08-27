@@ -14,8 +14,8 @@ hide_st_style = """
             footer {visibility: hidden;}
             header {visibility: hidden;}
             [data-testid="stSidebar"] {
-                    display: none;
-                }
+                        display: none;
+                    }
             </style>
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
@@ -29,9 +29,6 @@ st.markdown("---")
 
 # ---- Top Controls Section ----
 st.header("⚙️ Simulation Controls")
-st.info(
-    "Adjusting a slider will restart the animation with the new value."
-)
 
 # Create three columns for the sliders to sit side-by-side
 c1, c2, c3 = st.columns(3)
@@ -66,7 +63,46 @@ with c3:
         help="Controls how many field vectors are displayed."
     )
 
+# ---- NEW: Collapsible Theory and Usage Boxes ----
+
+with st.expander("📖 The Physics Behind the Simulation"):
+    st.markdown("""
+    An **accelerating electric charge** is the source of all electromagnetic (EM) radiation, from radio waves to gamma rays. This simulation demonstrates this fundamental principle.
+
+    **How It Works:**
+    1.  **The Source:** At the center is an electric charge oscillating up and down. Since its velocity is constantly changing, it is always accelerating.
+    2.  **Changing Fields:** According to Maxwell's Equations, an accelerating charge produces a disturbance in its surrounding electric field ($E$). This changing electric field, in turn, generates a changing magnetic field ($B$).
+    3.  **Self-Propagation:** The process becomes self-sustaining. The newly created changing magnetic field induces another changing electric field further away, which induces another changing magnetic field, and so on. This continuous "leapfrogging" of energy between the electric and magnetic fields is what we call an **electromagnetic wave**.
+
+    **Key Properties of the Wave:**
+    * **Transverse Nature:** The oscillations of the Electric Field (**yellow**) and Magnetic Field (**pink**) are perpendicular to the direction the wave is traveling. They are also perpendicular to each other. The direction of propagation is given by the cross product $\\vec{S} \\propto \\vec{E} \\times \\vec{B}$.
+    * **Speed:** The wave propagates outwards from the source at the speed of light, $c$.
+    * **In Phase:** The E and B fields reach their maximum and minimum values at the same time and position.
+    * **Field Strength:** The strength of the fields decreases with distance from the source. For a simple oscillating dipole like this, the field strength is proportional to $\\frac{1}{r}$, where $r$ is the distance. The electric field's magnitude is approximated by:
+        $$ E(r, t) \\propto \\frac{A \\cdot \\omega^2}{r} \\sin(\\omega(t - r/c)) $$
+        where $A$ is the amplitude, $\\omega$ is the angular frequency, and $(t - r/c)$ is the "retarded time," which accounts for the time it takes the wave to travel a distance $r$.
+    """)
+
+with st.expander("🖱️ How to Use This Simulation"):
+    st.markdown("""
+    **3D Scene Interaction:**
+    You can interact with both 3D visualizations below using your mouse:
+    * **Rotate:** Left-click and drag.
+    * **Pan/Move:** Right-click and drag.
+    * **Zoom:** Use the mouse scroll wheel.
+
+    **Simulation Controls:**
+    * **Amplitude (A):** This slider controls the maximum displacement of the central charge. A larger amplitude means the charge accelerates more vigorously, generating a stronger EM wave with higher peaks and troughs.
+    * **Frequency (ω):** This slider controls how rapidly the charge oscillates. Higher frequencies produce waves with shorter wavelengths ($\\lambda$), meaning the crests and troughs are packed closer together. The relationship is given by $\\lambda = \\frac{2\\pi v}{\\omega}$, where $v$ is the wave's propagation speed.
+    * **Field Grid Density:** This is a visual setting that changes the number of field vectors (arrows) displayed in the top simulation. Higher density provides a more detailed look at the field structure but may impact performance on some devices.
+    """)
+
+
 st.markdown("---")
+
+# ---- NEW: Titles for the 3D Animations ----
+st.markdown("### 1. Field Visualization of an Oscillating Charge")
+st.markdown("### 2. Waveform Slice of the Propagating EM Wave")
 
 
 # ---- Bottom Animation Section ----
@@ -357,8 +393,8 @@ st.markdown("---")
 st.header("Anatomy of an EM Wave")
 st.markdown("""
 The plot above shows a simplified, **interactive 3D view** of a plane electromagnetic wave propagating through space.
-- The Electric Field (E) (yellow tube) oscillates vertically.
-- The Magnetic Field (B) (pink tube) oscillates horizontally.
+- The Electric Field (E) (**yellow tube**) oscillates vertically.
+- The Magnetic Field (B) (**pink tube**) oscillates horizontally.
 - Notice that the E and B fields are always **in phase** and **perpendicular** to each other and to the direction of propagation.
 """)
 st.markdown("---")
