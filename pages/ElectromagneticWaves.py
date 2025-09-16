@@ -37,7 +37,7 @@ with c1:
     amplitude = st.slider(
         "Amplitude (A)",
         min_value=0.5,
-        max_value=5.0,
+        max_value=20.0,
         value=2.5,
         step=0.1,
         help="Controls how far the charge moves. This affects the wave's strength."
@@ -47,7 +47,7 @@ with c2:
     frequency = st.slider(
         "Frequency (ω)",
         min_value=0.5,
-        max_value=5.0,
+        max_value=20.0,
         value=2.0,
         step=0.1,
         help="Controls how fast the charge oscillates. This affects the wavelength."
